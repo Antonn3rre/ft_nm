@@ -6,17 +6,30 @@
 
 int main(int argc, char **argv) {
 
-	if (argc != 2) // a changer pourt a.out par defaut
+  int fd;
+
+	if (argc > 2)
 		return (0);
 
-	int fd = open(argv[1], O_RDONLY);
-	if (fd == -1) {
-		printf("Error opening file\n");
-		return (0);
-	}
+// Open file
+  if (argc == 2) {
+	  fd = open(argv[1], O_RDONLY);
+    if (fd == -1) {
+      perror("nm"); // TODO: print file name
+		  return (0);
+    }
+  } else {
+	  fd = open("a.out", O_RDONLY);
+    if (fd == -1) {
+      perror("nm: 'a.out'");
+		  return (0);
+	  }
+  }
+
+// Get file info
 	struct stat fileStat;
 	if (fstat(fd, &fileStat) == -1) {
-		printf("fstat error\n");
+    perror("fstat");
 		return (0);
 	}
 	printf("uid = %d, size = %ld\n", fileStat.st_uid, fileStat.st_size);
@@ -24,15 +37,17 @@ int main(int argc, char **argv) {
 		printf("Empty file\n");
 		return (0);
 	}
+  // TODO: check file type
 
+// Project file content
 	char *file = mmap(NULL, fileStat.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
 	if (file == MAP_FAILED) {
-		printf("mmap fail\n");
+    perror("mmap");
 		return (0);
 	}
 	close(fd);
 
-	printf("FIle = %s\n", file);
+	printf("File = %s\n", file);
 
 	return (0);
 }
