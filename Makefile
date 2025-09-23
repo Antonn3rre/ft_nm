@@ -6,7 +6,8 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
 # Fichiers sources et objets
-SRC = main.c
+SRC = main.c \
+	  init.c
 
 OBJ = $(SRC:.c=.o)
 

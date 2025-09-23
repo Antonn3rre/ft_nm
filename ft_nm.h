@@ -29,6 +29,9 @@ typedef struct s_nm {
 } t_nm;
 
 // main.c
-int main(int argc, char **argv);
+int main(int, char **);
+
+// init.c
+int init(int, char **, t_nm *);
 
 #endif // !FT_NM_H
