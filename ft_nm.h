@@ -11,10 +11,14 @@
 
 typedef struct s_32bits {
 	Elf32_Ehdr *header;
+	Elf32_Phdr *program;
+	Elf32_Shdr *section;
 } t_32bits;
 
 typedef struct s_64bits {
 	Elf64_Ehdr *header;
+	Elf64_Phdr *program;
+	Elf64_Shdr *section;
 } t_64bits;
 
 typedef union {
@@ -26,6 +30,9 @@ typedef struct s_nm {
 	u_Nbits infoBits;
 	bool is64Bits;
 	char *mapped;
+	size_t fileSize;
+	bool hasProgram;
+	bool hasSection;
 } t_nm;
 
 // main.c

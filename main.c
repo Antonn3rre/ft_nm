@@ -18,8 +18,18 @@ int main(int argc, char **argv) {
 	       (unsigned int)info.infoBits.u_64bits.header->e_shoff,
 	       (unsigned int)info.infoBits.u_64bits.header->e_shentsize,
 	       (unsigned int)info.infoBits.u_64bits.header->e_shnum);
-*/
 	//	printf("File = %s\n", file);
+	if (info.hasProgram)
+		printf("Struct phdr, type = %u\n",
+		       info.infoBits.u_64bits.program->p_type);
+	else
+		printf("No program header\n");
+	if (info.hasSection)
+		printf("Struct shdr, type = %u\n",
+		       info.infoBits.u_64bits.section->sh_type);
+	else
+		printf("No section header\n");
+*/
 
 	return (0);
 }
