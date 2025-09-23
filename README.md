@@ -42,30 +42,20 @@ Cast le fichier map en unsigned char, étant donné que le début des header, ic
 Que contient la structure elfN_Ehdr ?
 -------------------------------------------------------------------------------------
 typedef struct {
-     unsigned char e_ident[EI_NIDENT];
-→ array of bytes specifies how to interpret the file (contient 0x7f EFL…)
-     uint16_t      e_type;
-→ type du fichier (executable, partage, core, relocatable, unknown)
-     uint16_t      e_machine;
-→ specifie l’architecture requise (Intel, Motorola..)
-     uint32_t      e_version;
-→ version du fichier
-     ElfN_Addr     e_entry;
-→ virtual address to which the system first transfers control, thus starting the process
-     ElfN_Off      e_phoff;
-→ program header table's file offset in bytes. [interessant]
-     ElfN_Off      e_shoff;
-→ holds the section header table's file offset in bytes. [inter]
+
+     unsigned char e_ident[EI_NIDENT]; → array of bytes specifies how to interpret the file (contient 0x7f EFL…)
+     uint16_t      e_type; → type du fichier (executable, partage, core, relocatable, unknown)
+     uint16_t      e_machine; → specifie l’architecture requise (Intel, Motorola..)
+     uint32_t      e_version; → version du fichier
+     ElfN_Addr     e_entry; → virtual address to which the system first transfers control, thus starting the process
+     ElfN_Off      e_phoff; → program header table's file offset in bytes.
+     ElfN_Off      e_shoff; → holds the section header table's file offset in bytes.
      uint32_t      e_flags;
      uint16_t      e_ehsize;
-     uint16_t      e_phentsize;
-→ holds the size in bytes of one entry in the file's program header table; all entries are the same size. [inter]
-     uint16_t      e_phnum;
-→ This member holds the number of entries in the program header table. [inter]
-     uint16_t      e_shentsize;
-→ This member holds a sections header's size in bytes. [inter]
-     uint16_t      e_shnum;
-→ This member holds the number of entries in the section header table. [inter]
+     uint16_t      e_phentsize; → holds the size in bytes of one entry in the file's program header table; all entries are the same size.
+     uint16_t      e_phnum; → This member holds the number of entries in the program header table.
+     uint16_t      e_shentsize; → This member holds a sections header's size in bytes.
+     uint16_t      e_shnum; → This member holds the number of entries in the section header table.
      uint16_t      e_shstrndx;
 } ElfN_Ehdr;
 
