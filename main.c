@@ -9,12 +9,11 @@ int main(int argc, char **argv) {
 
 	if (!init(argc, argv, &info))
 		return (0);
-	/*
-	printf("e_phoff = %u\ne_phentsize = %u\n, e_phnum = %u\n",
+	printf("e_phoff = %u, e_phentsize = %u, e_phnum = %u\n",
 	       (unsigned int)info.infoBits.u_64bits.header->e_phoff,
 	       (unsigned int)info.infoBits.u_64bits.header->e_phentsize,
 	       (unsigned int)info.infoBits.u_64bits.header->e_phnum);
-	printf("e_shoff = %u\ne_shentsize = %u\n, e_shnum = %u\n",
+	printf("e_shoff = %u, e_shentsize = %u, e_shnum = %u\n",
 	       (unsigned int)info.infoBits.u_64bits.header->e_shoff,
 	       (unsigned int)info.infoBits.u_64bits.header->e_shentsize,
 	       (unsigned int)info.infoBits.u_64bits.header->e_shnum);
@@ -29,7 +28,9 @@ int main(int argc, char **argv) {
 		       info.infoBits.u_64bits.section->sh_type);
 	else
 		printf("No section header\n");
-*/
 
+	// Get the .symtab header section
+	if (!findSymtabHeader(&info))
+		return (0);
 	return (0);
 }

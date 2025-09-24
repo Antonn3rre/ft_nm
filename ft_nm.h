@@ -13,12 +13,14 @@ typedef struct s_32bits {
 	Elf32_Ehdr *header;
 	Elf32_Phdr *program;
 	Elf32_Shdr *section;
+	Elf32_Shdr *symtab;
 } t_32bits;
 
 typedef struct s_64bits {
 	Elf64_Ehdr *header;
 	Elf64_Phdr *program;
 	Elf64_Shdr *section;
+	Elf64_Shdr *symtab;
 } t_64bits;
 
 typedef union {

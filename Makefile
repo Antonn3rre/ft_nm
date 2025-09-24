@@ -7,7 +7,8 @@ CFLAGS = -Wall -Wextra -Werror
 
 # Fichiers sources et objets
 SRC = main.c \
-	  init.c
+	  init.c \
+	  findHeader.c
 
 OBJ = $(SRC:.c=.o)
 
