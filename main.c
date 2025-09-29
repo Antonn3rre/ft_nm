@@ -30,7 +30,8 @@ int main(int argc, char **argv) {
 		printf("No section header\n");
 
 	// Get the .symtab header section
-	if (!findSymtabHeader(&info))
+	if (!findSymtabHeader(&info) || !printInfo(&info))
 		return (0);
+
 	return (0);
 }

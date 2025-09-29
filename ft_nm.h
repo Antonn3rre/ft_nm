@@ -14,6 +14,7 @@ typedef struct s_32bits {
 	Elf32_Phdr *program;
 	Elf32_Shdr *section;
 	Elf32_Shdr *symtab;
+	Elf32_Shdr *strtab;
 } t_32bits;
 
 typedef struct s_64bits {
@@ -21,6 +22,7 @@ typedef struct s_64bits {
 	Elf64_Phdr *program;
 	Elf64_Shdr *section;
 	Elf64_Shdr *symtab;
+	Elf64_Shdr *strtab;
 } t_64bits;
 
 typedef union {
@@ -42,5 +44,11 @@ int main(int, char **);
 
 // init.c
 int init(int, char **, t_nm *);
+
+// findHeader.c
+int findSymtabHeader(t_nm *info);
+
+// printInfo.c
+int printInfo(t_nm *info);
 
 #endif // !FT_NM_H
