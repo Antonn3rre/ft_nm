@@ -1,6 +1,13 @@
 #include "ft_nm.h"
 #include <elf.h>
 
+int ft_strlen(char *str) {
+	int i = 0;
+	while (str[i])
+		i++;
+	return (i);
+}
+
 void printType64(t_64bits info, Elf64_Sym *actual) {
 	// Ordre de check : U, u, A, B/b, D/d, C/c, G/g, I,
 	// N, n, P, R/r, S/s, T/t, -, V/v, W/w, si rien ?
@@ -11,8 +18,9 @@ void printType64(t_64bits info, Elf64_Sym *actual) {
 		c = 'U';
 	else if (ELF64_ST_BIND(actual->st_info) == STB_GNU_UNIQUE)
 		c = 'u';
+	// a affiche pour -a
 	else if (actual->st_shndx == SHN_ABS)
-		c = 'A';
+		c = '!'; // pour savoir qu'il ne faut pas afficher
 	else if (info.section[actual->st_shndx].sh_type == SHT_NOBITS &&
 	         (info.section[actual->st_shndx].sh_flags &
 	          (SHF_ALLOC | SHF_WRITE)) == (SHF_ALLOC | SHF_WRITE)) {
@@ -31,6 +39,44 @@ void printType64(t_64bits info, Elf64_Sym *actual) {
 		if (ELF64_ST_BIND(actual->st_info) == STB_LOCAL)
 			c = 'c';
 	}
+	// manque G/g
+	else if (ELF64_ST_TYPE(actual->st_info) == STT_GNU_IFUNC)
+		c = 'I';
+	// manque N
+	// manque P
+	else if (info.section[actual->st_shndx].sh_type == SHT_PROGBITS &&
+	         (info.section[actual->st_shndx].sh_flags &
+	          (SHF_ALLOC | SHF_EXECINSTR)) == (SHF_ALLOC | SHF_EXECINSTR)) {
+		c = 'T';
+		if (ELF64_ST_BIND(actual->st_info) == STB_LOCAL)
+			c = 't';
+	} else if (info.section[actual->st_shndx].sh_type == SHT_PROGBITS &&
+	           (info.section[actual->st_shndx].sh_flags & SHF_ALLOC) ==
+	               SHF_ALLOC) {
+		c = 'R';
+		if (ELF64_ST_BIND(actual->st_info) == STB_LOCAL)
+			c = 'r';
+	}
+	// manque S
+	//	else if ((actual->st_other) & 0xFF) == STO_SMALL_DATA) {
+	//			c = 'S';
+	//			if (ELF64_ST_BIND(actual->st_info) == STB_LOCAL)
+	//				c = 's';
+	//		}
+	//		manque -
+	else if (info.section[actual->st_shndx].sh_type == SHT_NOTE)
+		c = 'n';
+	else if (ELF64_ST_BIND(actual->st_info) == STB_WEAK &&
+	         ELF64_ST_TYPE(actual->st_info) == STT_OBJECT) {
+		c = 'V';
+		if (actual->st_shndx == SHN_UNDEF)
+			c = 'v';
+	} else if (ELF64_ST_BIND(actual->st_info) == STB_WEAK) {
+		c = 'W';
+		if (actual->st_shndx == SHN_UNDEF)
+			c = 'w';
+	}
+
 	printf(" %c ", c);
 }
 int printInfo(t_nm *info) {
@@ -54,11 +100,14 @@ int printInfo(t_nm *info) {
 
 			char *name = (char *)info64.header + info64.strtab->sh_offset +
 			             actual->st_name;
+			if (!name || ft_strlen(name) == 0)
+				continue;
 			//			printf("Name = %s\n", name);
-			if (!actual->st_value)
+			if (ELF64_ST_TYPE(actual->st_info) == STT_NOTYPE ||
+			    actual->st_shndx == SHN_UNDEF)
 				printf("                ");
 			else
-				printf("%016lu", actual->st_value);
+				printf("%016llx", (unsigned long long)actual->st_value);
 			printType64(info64, actual);
 			printf("%s\n", name);
 		}
